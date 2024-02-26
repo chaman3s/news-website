@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-
+import data  from "../sampleOutput.json"
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
 import PropTypes from 'prop-types'
@@ -17,12 +17,15 @@ const News = (props)=>{
 
     const updateNews = async ()=> {
         props.setProgress(10);
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`; 
+        
+        // const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`; 
+        // console.log(url);
         setLoading(true)
-        let data = await fetch(url);
+        // let data = await fetch(url);
         props.setProgress(30);
-        let parsedData = await data.json()
-        console.log(parsedData);
+        let parsedData;
+        console.log("ok",parsedData);
+        data.sample.map(((element)=>{if(element.category==props.category){parsedData=element.data}}));
         props.setProgress(70);
         setArticles(parsedData.articles)
         setTotalResults(parsedData.totalResults)
@@ -38,10 +41,11 @@ const News = (props)=>{
 
 
     const fetchMoreData = async () => {   
-        console.log("helloo",props.apiKey);
-        const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`;
-        setPage(page+1) 
-        let data = await fetch(url);
+        // console.log("helloo",props.apiKey);
+        // const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page+1}&pageSize=${props.pageSize}`;
+        // setPage(page+1) 
+        // let data = await fetch(url);
+
         let parsedData = await data.json()
         console.log(parsedData);
         setArticles(articles.concat(parsedData.articles))
@@ -54,7 +58,7 @@ const News = (props)=>{
                 {loading && <Spinner />}
                 <InfiniteScroll
                     dataLength={articles.length}
-                    next={fetchMoreData}
+                   
                     hasMore={articles.length !== totalResults}
                     loader={<Spinner/>}
                 > 
